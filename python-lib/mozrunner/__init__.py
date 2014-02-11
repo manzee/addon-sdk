@@ -442,7 +442,7 @@ class Runner(object):
                     except _winreg.error:
                         pass
 
-            # search for the binary in the path            
+            # search for the binary in the path
             for name in reversed(self.names):
                 binary = findInPath(name)
                 if sys.platform == 'cygwin':
@@ -491,7 +491,7 @@ class Runner(object):
     @property
     def command(self):
         """Returns the command list to run."""
-        cmd = [self.binary, '-profile', self.profile.profile]
+        cmd = [self.binary, '-profile', self.profile.profile, 'about:app-manager']
         # On i386 OS X machines, i386+x86_64 universal binaries need to be told
         # to run as i386 binaries.  If we're not running a i386+x86_64 universal
         # binary, then this command modification is harmless.
@@ -606,7 +606,7 @@ class CLI(object):
                                                 metavar=None, default=None),
                       ('-p', "--profile",): dict(dest="profile", help="Profile path.",
                                                  metavar=None, default=None),
-                      ('-a', "--addons",): dict(dest="addons", 
+                      ('-a', "--addons",): dict(dest="addons",
                                                 help="Addons paths to install.",
                                                 metavar=None, default=None),
                       ("--info",): dict(dest="info", default=False,
@@ -625,13 +625,13 @@ class CLI(object):
         if self.options.info:
             self.print_metadata()
             sys.exit(0)
-            
+
         # XXX should use action='append' instead of rolling our own
         try:
             self.addons = self.options.addons.split(',')
         except:
             self.addons = []
-            
+
     def get_metadata_from_egg(self):
         import pkg_resources
         ret = {}
@@ -641,10 +641,10 @@ class CLI(object):
                 key, value = line.split(':', 1)
                 ret[key] = value
         if dist.has_metadata("requires.txt"):
-            ret["Dependencies"] = "\n" + dist.get_metadata("requires.txt")    
+            ret["Dependencies"] = "\n" + dist.get_metadata("requires.txt")
         return ret
-        
-    def print_metadata(self, data=("Name", "Version", "Summary", "Home-page", 
+
+    def print_metadata(self, data=("Name", "Version", "Summary", "Home-page",
                                    "Author", "Author-email", "License", "Platform", "Dependencies")):
         for key in data:
             if key in self.metadata:
